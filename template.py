@@ -8,6 +8,8 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn import metrics
 from sklearn.svm import SVC
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
 
 def load_dataset(dataset_path):
     # To-Do: Implement this function
@@ -55,7 +57,10 @@ def random_forest_train_test(x_train, x_test, y_train, y_test):
 
 
 def svm_train_test(x_train, x_test, y_train, y_test):
-    svm_m = SVC()
+    svm_m = make_pipeline(
+        StandardScaler(),
+        SVC()
+    )
     svm_m.fit(x_train, y_train)
     test_pred_decision_svm = svm_m.predict(x_test)
     acc = metrics.accuracy_score(y_test, test_pred_decision_svm)
@@ -74,7 +79,7 @@ def print_performances(acc, prec, recall):
 
 if __name__ == '__main__':
     # Do not modify the main script!
-    data_path = sys.argv[1]  #
+    data_path = sys.argv[1]
     data_df = load_dataset(data_path)
 
     n_feats, n_class0, n_class1 = dataset_stat(data_df)
